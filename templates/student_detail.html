@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Details</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+
+body{background:#020617;color:white;display:flex}
+
+/* SIDEBAR */
+.sidebar{
+  width:220px;
+  height:100vh;
+  border-right:1px solid rgba(255,255,255,0.1);
+  padding:20px;
+}
+
+.sidebar h2{color:#3b82f6;margin-bottom:30px}
+
+.sidebar li{
+  list-style:none;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:8px;
+  cursor:pointer;
+  color:#94a3b8;
+}
+
+.sidebar li:hover{background:#1e293b;color:white}
+
+/* MAIN */
+.main{flex:1;padding:30px}
+
+/* PROFILE */
+.profile{
+  display:flex;
+  gap:20px;
+  align-items:center;
+  margin-bottom:30px;
+}
+
+.profile img{
+  width:120px;
+  height:120px;
+  border-radius:15px;
+  object-fit:cover;
+}
+
+.info h2{margin-bottom:10px}
+
+.tag{
+  display:inline-block;
+  padding:5px 10px;
+  border-radius:6px;
+  background:#22c55e;
+  font-size:12px;
+}
+
+/* CARD */
+.card{
+  background:rgba(255,255,255,0.05);
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+
+/* TABLE */
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th, td{
+  padding:12px;
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.present{color:#22c55e}
+.absent{color:#ef4444}
+
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h2>AI System</h2>
+  <ul>
+    <li>Dashboard</li>
+    <li>Students</li>
+    <li>Attendance</li>
+  </ul>
+</div>
+
+<div class="main">
+
+<!-- PROFILE -->
+<div class="profile">
+  <img src="https://i.pravatar.cc/150">
+  <div class="info">
+    <h2>Rahul Sharma</h2>
+    <p>ID: STU001</p>
+    <span class="tag">Embeddings Stored</span>
+  </div>
+</div>
+
+<!-- DETAILS -->
+<div class="card">
+  <h3>Student Info</h3>
+  <p>Email: rahul@email.com</p>
+  <p>Course: BSc AI</p>
+</div>
+
+<!-- ATTENDANCE -->
+<div class="card">
+  <h3>Attendance History</h3>
+  <table>
+    <tr>
+      <th>Date</th>
+      <th>Time</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td>05 Apr 2026</td>
+      <td>09:02 AM</td>
+      <td class="present">Present</td>
+    </tr>
+    <tr>
+      <td>04 Apr 2026</td>
+      <td>—</td>
+      <td class="absent">Absent</td>
+    </tr>
+  </table>
+</div>
+
+</div>
+
+</body>
+</html>
