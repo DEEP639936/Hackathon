@@ -190,13 +190,6 @@ def generate_frames():
                         [best_id, "SESSION1", "Present"]
                     )
 
-                    # 🔥 SEND EVENT
-                    send_to_n8n({
-                        "type": "attendance",
-                        "student_id": best_id,
-                        "name": best_name
-                    })
-
             else:
                 label = "Unknown"
                 color = (0,0,255)
