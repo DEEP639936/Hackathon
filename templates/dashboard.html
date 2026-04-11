@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
+
+body{
+  background: radial-gradient(circle at top, #020617, #000);
+  color:white;
+  display:flex;
+}
+
+/* ===== LOADER ===== */
+#loader{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.spinner{
+  width:70px;
+  height:70px;
+  border:5px solid rgba(255,255,255,0.1);
+  border-top:5px solid #00f7ff;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  100%{transform:rotate(360deg)}
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+  width:240px;
+  height:100vh;
+  backdrop-filter:blur(20px);
+  background:rgba(255,255,255,0.03);
+  border-right:1px solid rgba(255,255,255,0.08);
+  padding:20px;
+}
+
+.sidebar h2{
+  margin-bottom:40px;
+  color:#00f7ff;
+  letter-spacing:1px;
+}
+
+.sidebar a{
+  display:block;
+  padding:12px;
+  margin-bottom:10px;
+  border-radius:10px;
+  text-decoration:none;
+  color:#94a3b8;
+  transition:0.3s;
+}
+
+.sidebar a:hover{
+  background:rgba(0,247,255,0.1);
+  color:#00f7ff;
+  box-shadow:0 0 10px #00f7ff33;
+}
+
+/* ===== MAIN ===== */
+.main{
+  flex:1;
+  padding:20px;
+}
+
+/* ===== TOPBAR ===== */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.topbar h2{
+  font-weight:600;
+}
+
+/* ===== CARDS ===== */
+.card{
+  background:rgba(255,255,255,0.04);
+  border-radius:16px;
+  padding:20px;
+  backdrop-filter:blur(15px);
+  border:1px solid rgba(255,255,255,0.08);
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 0 20px rgba(0,247,255,0.2);
+}
+
+/* ===== GRID ===== */
+.grid{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:20px;
+}
+
+/* ===== CAMERA ===== */
+.camera img{
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.1);
+}
+
+/* ===== STATS ===== */
+.stats{
+  display:flex;
+  gap:15px;
+  margin-top:20px;
+}
+
+.stat{
+  flex:1;
+  padding:15px;
+  border-radius:12px;
+  background:rgba(0,247,255,0.05);
+  text-align:center;
+  border:1px solid rgba(0,247,255,0.2);
+}
+
+/* ===== TABLE ===== */
+.table{
+  margin-top:20px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th, td{
+  padding:12px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.status{
+  color:#00f7ff;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== LOADER ===== -->
+<div id="loader">
+  <div class="spinner"></div>
+</div>
+
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar">
+  <h2>AI System</h2>
+  <ul>
+    <li><a href="/dashboard">Dashboard</a></li>
+    <li><a href="/add-student">Add Student</a></li>
+    <li><a href="/students">Students</a></li>
+    <li><a href="/attendance">Attendance</a></li>
+  </ul>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+  <div class="topbar">
+    <h2>Dashboard</h2>
+    <div>Admin</div>
+  </div>
+
+  <div class="grid">
+
+    <!-- CAMERA -->
+    <div class="card camera">
+      <img src="{{ url_for('video_feed') }}" width="640">
+    </div>
+
+    <!-- STATUS -->
+<div class="card">
+  <h3>System Status</h3>
+  <p id="model">Model: Checking...</p>
+  <p id="camera">Camera: Checking...</p>
+  <p id="detection">Detection: Checking...</p>
+</div>
+
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">👨‍🎓 {{ total_students }} Students</div>
+    <div class="stat">✅ {{ present }} Present</div>
+    <div class="stat">❌ {{ absent }} Absent</div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="card table">
+    <h3>Recent Attendance</h3>
+    <table>
+      <tr>
+        <th>Id</th>
+        <th>Time</th>
+        <th>Status</th>
+      </tr>
+
+      {% for row in recent %}
+      <tr>
+        <td>
+	{{ row.student_id }}
+	</td>
+        <td>{{ row.timestamp }}</td>
+        <td class="status">{{ row.status }}</td>
+      </tr>
+      {% endfor %}
+
+    </table>
+  </div>
+
+</div>
+
+<!-- ===== JS ===== -->
+<script>
+window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    loader.style.opacity = "0";
+    setTimeout(() => loader.style.display = "none", 300);
+});
+
+document.querySelectorAll("a").forEach(link => {
+    link.addEventListener("click", () => {
+        const loader = document.getElementById("loader");
+        loader.style.display = "flex";
+        loader.style.opacity = "1";
+    });
+});
+
+function updateStatus(){
+    fetch("/system-status")
+    .then(res => res.json())
+    .then(data => {
+
+        document.getElementById("camera").innerText =
+            "Camera: " + (data.camera ? "Connected ✅" : "Disconnected ❌");
+
+        document.getElementById("model").innerText =
+            "Model: " + (data.model ? "Loaded ✅" : "Error ❌");
+
+        document.getElementById("detection").innerText =
+            "Detection: " + (data.detection ? "Running 🟢" : "Stopped 🔴");
+
+    })
+    .catch(() => {
+        document.getElementById("camera").innerText = "Camera: Error ❌";
+        document.getElementById("model").innerText = "Model: Error ❌";
+        document.getElementById("detection").innerText = "Detection: Error ❌";
+    });
+}
+
+// update every 2 seconds
+setInterval(updateStatus, 2000);
+
+// initial call
+updateStatus();
+
+</script>
+
+</body>
+</html>
