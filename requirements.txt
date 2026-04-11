@@ -1,0 +1,11 @@
+flask
+gunicorn
+opencv-python-headless
+deepface==0.0.93
+tensorflow-cpu
+numpy==1.24.3
+pandas
+tqdm
+Pillow
+python-dotenv
+tf-keras
